@@ -21,8 +21,8 @@ import com.teste.pratico.persistense.repository.SolicitanteRepository;
 @Transactional(propagation = Propagation.REQUIRED)
 public class SolicitanteService {
 
-	private SolicitanteRepository repository;
-	private SolicitanteMapper mapper;
+	private final SolicitanteRepository repository;
+	private final SolicitanteMapper mapper;
 	
 	public SolicitanteService(SolicitanteRepository repo, SolicitanteMapper map) {
 		this.repository = repo;
@@ -46,9 +46,6 @@ public class SolicitanteService {
 		return Optional.empty();
 	}
 
-	public boolean existePorId(Long id) {
-		return repository.existsById(id);
-	}
 
 	public String create(SolicitanteDTO dto) {
 		jaExiste(dto);
@@ -80,23 +77,23 @@ public class SolicitanteService {
 		if (optDtoBase.isPresent()) {
 			SolicitanteDTO dtoBase = optDtoBase.get();
 			repository.deleteById(dtoBase.getId());
-			return String.format(Mensagens.SOLICITANTE_ATUALIZADO, dtoBase.getNome());
+			return String.format(Mensagens.SOLICITANTE_REMOVIDO, dtoBase.getNome());
 		}
 		throw new EntidadeNaoEncontradaException(String.format(Mensagens.SOLICITANTE_NAO_LOCALIZADO));
 	}
 		
-	protected void jaExiste(SolicitanteDTO dto) {
+	private void jaExiste(SolicitanteDTO dto) {
 		Optional<SolicitanteEntity> opt = repository.findByNome(dto.getNome());
 		if (opt.isPresent()) {
 			 throw new EntidadeExisteException(String.format(Mensagens.SOLICITANTE_EXISTENTE, dto.getNome()));
 		   }
 	}
 		
-	protected void validaRegrasNegocio(SolicitanteDTO dto) {
+	private void validaRegrasNegocio(SolicitanteDTO dto) {
 
 	}
 
-	protected void trataUpdate(SolicitanteEntity entBD, SolicitanteEntity ent) {
+	private void trataUpdate(SolicitanteEntity entBD, SolicitanteEntity ent) {
 	}
 	
 }
