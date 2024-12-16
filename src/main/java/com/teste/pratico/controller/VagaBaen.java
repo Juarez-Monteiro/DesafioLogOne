@@ -11,8 +11,8 @@ import javax.faces.context.FacesContext;
 import org.springframework.web.context.annotation.RequestScope;
 
 import com.teste.pratico.business.exception.EntidadeExisteException;
-import com.teste.pratico.business.service.SolicitanteService;
-import com.teste.pratico.domain.dto.SolicitanteDTO;
+import com.teste.pratico.business.service.VagaService;
+import com.teste.pratico.domain.dto.VagaDTO;
 import com.teste.pratico.helpers.Mensagens;
 
 import lombok.Data;
@@ -20,26 +20,26 @@ import lombok.Data;
 @ManagedBean
 @RequestScope
 @Data
-public class SolicitanteBean {
+public class VagaBaen {
 
-	private final SolicitanteService service;
+	private final VagaService service;
+	
+	private VagaDTO dto;
 
-	private SolicitanteDTO dto;
-
-	public SolicitanteBean(SolicitanteService serv) {
-		this.service = serv;
-		this.dto = new SolicitanteDTO();
+	public VagaBaen(VagaService service) {
+		this.service = service;
+		this.dto = new VagaDTO();
 	}
-
-	public List<SolicitanteDTO> listarTodosSolicitantes() {
+	
+	public List<VagaDTO> listarTodasVagas() {
 		return service.findAll();
 	}
 
-	public Optional<SolicitanteDTO> bucarPorId(Long solicitanteID) {
-		return service.findById(solicitanteID);
+	public Optional<VagaDTO> bucarPorId(Long vagaID) {
+		return service.findById(vagaID);
 	}
 
-	public void salvarSolicitante() throws IOException {
+	public void salvarVaga() throws IOException {
 		try {
 			String mensagem = service.create(dto);
 			FacesContext context = FacesContext.getCurrentInstance();
@@ -58,14 +58,14 @@ public class SolicitanteBean {
 
 	}
 
-	public void atualizarSolicitante(SolicitanteDTO dto) {
+	public void atualizarVaga(VagaDTO dto) {
 		String mensagem = service.update(dto);
 		FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, mensagem, ""));
 	}
 
-	public void apagarSolicitante(Long id) {
+	public void apagarVaga(Long id) {
 		String mensagem = service.delete(id);
 		FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, mensagem, ""));
 	}
-
+	
 }
