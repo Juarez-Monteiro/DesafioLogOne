@@ -46,7 +46,6 @@ public class SolicitanteService {
 		return Optional.empty();
 	}
 
-
 	public String create(SolicitanteDTO dto) {
 		jaExiste(dto);
 		validaRegrasNegocio(dto);
@@ -58,6 +57,7 @@ public class SolicitanteService {
 	public String update(SolicitanteDTO dto) {
 		Optional<SolicitanteEntity> optEntityBase = repository.findById(dto.getId());
 		if (optEntityBase.isPresent()) {
+			jaExiste(dto);
 			validaRegrasNegocio(dto);
 
 			SolicitanteEntity entityFromBase = optEntityBase.get();
@@ -94,6 +94,7 @@ public class SolicitanteService {
 	}
 
 	private void trataUpdate(SolicitanteEntity entBD, SolicitanteEntity ent) {
+		entBD.setNome(ent.getNome());
 	}
 	
 }

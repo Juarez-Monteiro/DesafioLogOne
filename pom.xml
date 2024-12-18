@@ -92,7 +92,7 @@
 			<scope>provided</scope>
 		</dependency>
 		
-		<!---->
+		<!--ADD-->
 		<dependency>
 			<groupId>org.mapstruct</groupId>
 			<artifactId>mapstruct</artifactId>
