@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.teste.pratico.business.converter.VagaMapper;
 import com.teste.pratico.business.exception.EntidadeExisteException;
 import com.teste.pratico.business.exception.EntidadeNaoEncontradaException;
+import com.teste.pratico.business.exception.ViolacaoRegraNegocioException;
 import com.teste.pratico.domain.dto.VagaDTO;
 import com.teste.pratico.domain.entity.VagaEntity;
 import com.teste.pratico.helpers.LogOneUtil;
@@ -58,12 +59,13 @@ public class VagaService {
 	public String update(VagaDTO dto) {
 		Optional<VagaEntity> optEntityBase = repository.findById(dto.getId());
 		if (optEntityBase.isPresent()) {
-//			jaExiste(dto); fazer depois
+			
+			jaExiste(dto); // verificar como desconsiderar o atual
 			validaRegrasNegocio(dto);
 
 			VagaEntity entityFromBase = optEntityBase.get();
 			VagaEntity entityFromDto = mapper.toEntity(dto);
-
+			verificaAgendamentoExistente(mapper.toDto(entityFromBase));
 			trataUpdate(entityFromBase, entityFromDto);
 			entityFromBase = repository.save(entityFromBase);
 
@@ -77,6 +79,7 @@ public class VagaService {
 		Optional<VagaDTO> optDtoBase = this.findById(id);
 		if (optDtoBase.isPresent()) {
 			VagaDTO dtoBase = optDtoBase.get();
+			verificaAgendamentoExistente(dtoBase);
 			repository.deleteById(dtoBase.getId());
 			return String.format(Mensagens.VAGA_REMOVIDA, dtoBase.getInicio(), dtoBase.getFim());
 		}
@@ -84,7 +87,7 @@ public class VagaService {
 	}
 		
 	private void jaExiste(VagaDTO dto) {
-		Optional<VagaEntity> opt = repository.findVagasInPeriodo(dto.getInicio());
+		Optional<VagaEntity> opt = repository.findVagasInPeriodo(dto.getInicio(), dto.getFim());
 		if (opt.isPresent()) {
 			 throw new EntidadeExisteException(String.format(Mensagens.VAGA_EXISTENTE, dto.getInicio(), dto.getFim()));
 		   }
@@ -92,15 +95,26 @@ public class VagaService {
 		
 	private  void validaRegrasNegocio(VagaDTO dto) {
 		if (dto.getInicio().isAfter(dto.getFim())) {
-		    throw new IllegalArgumentException("A data de início não pode ser posterior à data de fim.");
+		    throw new ViolacaoRegraNegocioException(String.format(Mensagens.DATA_INICIO_POSTERIOR_FIM));
 		}
 		if (dto.getInicio().isBefore(LocalDate.now())) {
-			 throw new IllegalArgumentException("A data de início não pode ser anterior à hoje.");
+			 throw new ViolacaoRegraNegocioException(String.format(Mensagens.DATA_INICIO_ANTERIOR_HOJE));
 		}
 	}
 
 	private void trataUpdate(VagaEntity entBD, VagaEntity ent) {
+		entBD.setInicio(ent.getInicio());
+		entBD.setFim(ent.getFim());
+		entBD.setQuantidade(ent.getQuantidade());
+		
 	}
 	
+	private void verificaAgendamentoExistente(VagaDTO dto) {
+		Boolean existe = repository.existeAgendamentoEntreDatas(dto.getInicio(),dto.getFim());
+		if (existe) {
+		    throw new ViolacaoRegraNegocioException(String.format(Mensagens.EXISTE_AGENDAMETO));
+		}
+	
+	}
 	
 }
