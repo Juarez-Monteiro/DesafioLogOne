@@ -1,6 +1,7 @@
 package com.teste.pratico.controller;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -10,29 +11,37 @@ import javax.faces.context.FacesContext;
 
 import org.springframework.web.context.annotation.RequestScope;
 
-import com.teste.pratico.business.exception.EntidadeExisteException;
 import com.teste.pratico.business.service.SolicitanteService;
 import com.teste.pratico.domain.dto.SolicitanteDTO;
-import com.teste.pratico.helpers.Mensagens;
 
 import lombok.Data;
 
 @ManagedBean
 @RequestScope
 @Data
-public class SolicitanteBean {
+public class SolicitanteBean extends AbstractBean {
 
 	private final SolicitanteService service;
 
 	private SolicitanteDTO dto;
 
+	private String filtroNome;
+	
+	private List<SolicitanteDTO> listaSolicitantes;
+	
+
 	public SolicitanteBean(SolicitanteService serv) {
 		this.service = serv;
 		this.dto = new SolicitanteDTO();
+		this.listaSolicitantes = new ArrayList<>();
 	}
 
-	public List<SolicitanteDTO> listarTodosSolicitantes() {
-		return service.findAll();
+	public void buscarPorNomeOuTodos() {
+		if (filtroNome != null && !filtroNome.trim().isEmpty()) {
+			listaSolicitantes = service.buscarTodosContemNome(filtroNome);
+		} else {
+			listaSolicitantes = service.findAll();
+		}
 	}
 
 	public Optional<SolicitanteDTO> bucarPorId(Long solicitanteID) {
@@ -44,28 +53,31 @@ public class SolicitanteBean {
 			String mensagem = service.create(dto);
 			FacesContext context = FacesContext.getCurrentInstance();
 			context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, mensagem, ""));
-	        context.getExternalContext().getFlash().setKeepMessages(true);
-	        context.getExternalContext().redirect("/index.xhtml");
-			
-		} catch (EntidadeExisteException e) {
-			FacesContext.getCurrentInstance().addMessage(null,
-					new FacesMessage(FacesMessage.SEVERITY_ERROR, e.getMessage(), ""));
-			
-		} catch (Exception e) {
-			FacesContext.getCurrentInstance().addMessage(null,
-					new FacesMessage(FacesMessage.SEVERITY_ERROR, Mensagens.ERRO_PROCESSAR, ""));
-		}
+			context.getExternalContext().getFlash().setKeepMessages(true);
+			context.getExternalContext().redirect("/index.xhtml");
 
+		} catch (Exception e) {
+			erroMensagem(e.getMessage());
+		}
 	}
 
 	public void atualizarSolicitante(SolicitanteDTO dto) {
-		String mensagem = service.update(dto);
-		FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, mensagem, ""));
+		try {
+			String mensagem = service.update(dto);
+			infoMensagem(mensagem);
+
+		} catch (Exception e) {
+			erroMensagem(e.getMessage());
+		}
 	}
 
 	public void apagarSolicitante(Long id) {
-		String mensagem = service.delete(id);
-		FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, mensagem, ""));
-	}
+		try {
+			String mensagem = service.delete(id);
+			infoMensagem(mensagem);
 
+		} catch (Exception e) {
+			erroMensagem(e.getMessage());
+		}
+	}
 }

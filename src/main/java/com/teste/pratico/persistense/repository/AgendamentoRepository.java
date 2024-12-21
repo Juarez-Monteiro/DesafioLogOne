@@ -1,6 +1,6 @@
 package com.teste.pratico.persistense.repository;
 
-import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -15,8 +15,14 @@ import com.teste.pratico.domain.entity.AgendamentoEntity;
 public interface AgendamentoRepository extends JpaRepository<AgendamentoEntity, Long> {
 
 	@Query("SELECT a FROM AgendamentoEntity a WHERE a.data >= :inicio AND a.data <= :fim AND a.solicitante.id = :solicitanteId")
-	List<AgendamentoEntity> listarSolicitantePorPeriodo(@Param("inicio") LocalDate inicio, @Param("fim") LocalDate fim,
+	List<AgendamentoEntity> listarSolicitantePorPeriodo(@Param("inicio") Date inicio, @Param("fim") Date fim,
 			@Param("solicitanteId") Long solicitanteId);
+	
+	@Query("SELECT a FROM AgendamentoEntity a WHERE a.data BETWEEN :inicio AND :fim " +
+		       "AND (:solicitanteId IS NULL OR a.solicitante.id = :solicitanteId)")
+		List<AgendamentoEntity> listarPorPeriodoESolicitante(@Param("inicio") Date inicio, 
+		                                                  @Param("fim") Date fim, 
+		                                                  @Param("solicitanteId") Long solicitanteId);
 
 	@Query("SELECT COUNT(a) " +
 		       "FROM AgendamentoEntity a " +
@@ -29,14 +35,16 @@ public interface AgendamentoRepository extends JpaRepository<AgendamentoEntity, 
 			+ "    a.solicitante.nome, " 
 			+ "    COUNT(a.id), "
 			+ "    v.id, " 
-			+ "    v.quantidade) " 
+			+ "    v.quantidade,"
+			+ "    v.inicio,"
+			+ "    v.fim) " 
 			+ "FROM AgendamentoEntity a " 
 			+ "JOIN VagaEntity v "
 			+ "ON a.data BETWEEN v.inicio AND v.fim " 
 			+ "WHERE a.data BETWEEN :inicio AND :fim "
 			+ "AND a.solicitante.id = :solicitanteId " 
 			+ "GROUP BY a.solicitante.nome, v.id, v.quantidade")
-	List<AgendamentoResumoDTO> calcularResumoAgendamentos(@Param("inicio") LocalDate inicio,
-			@Param("fim") LocalDate fim, @Param("solicitanteId") Long solicitanteId);
+	List<AgendamentoResumoDTO> calcularResumoAgendamentos(@Param("inicio") Date inicio,
+			@Param("fim") Date fim, @Param("solicitanteId") Long solicitanteId);
 
 }

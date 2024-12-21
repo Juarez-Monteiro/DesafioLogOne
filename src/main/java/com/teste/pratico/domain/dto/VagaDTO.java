@@ -1,6 +1,6 @@
 package com.teste.pratico.domain.dto;
 
-import java.time.LocalDate;
+import java.util.Date;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -9,9 +9,9 @@ import lombok.Setter;
 @Setter
 public class VagaDTO extends AbstractDTO{
 
-	private LocalDate inicio;
+	private Date inicio;
 	
-	private LocalDate fim;
+	private Date fim;
 
 	private Integer quantidade;
 }

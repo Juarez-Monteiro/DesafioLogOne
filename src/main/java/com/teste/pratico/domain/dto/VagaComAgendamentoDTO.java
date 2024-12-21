@@ -1,6 +1,6 @@
 package com.teste.pratico.domain.dto;
 
-import java.time.LocalDate;
+import java.util.Date;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -10,12 +10,12 @@ import lombok.Setter;
 public class VagaComAgendamentoDTO {
 
 	private Long id;
-    private LocalDate inicio;
-    private LocalDate fim;
+    private Date inicio;
+    private Date fim;
     private Integer quantidade;
     private Long totalAgendamentos;
 
-    public VagaComAgendamentoDTO(Long id, LocalDate inicio, LocalDate fim, Integer quantidade, Long totalAgendamentos) {
+    public VagaComAgendamentoDTO(Long id, Date inicio, Date fim, Integer quantidade, Long totalAgendamentos) {
         this.id = id;
         this.inicio = inicio;
         this.fim = fim;
