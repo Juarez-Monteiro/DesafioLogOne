@@ -1,0 +1,120 @@
+<ui:composition template="/pages/template/base.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+	<ui:define name="content">
+		<div class="container" id="container">
+			<h:form id="formPrincipal" class="formPrincipal">
+				<p:messages id="mensagens" showDetail="true" closable="true"
+					globalOnly="true" style="width: 100%">
+					<p:autoUpdate />
+				</p:messages>
+
+				<h1 class="title">Listar vagas</h1>
+
+				<h:panelGrid columns="3" style="width: 100%">
+
+					<h:panelGroup class="card ui-fluid">
+						<div class="card">
+
+							<p:growl id="minicio" showDetail="true"
+								skipDetailIfEqualsSummary="true">
+								<p:autoUpdate />
+							</p:growl>
+							<div class="ui-fluid grid formgrid">
+								<div class="field col-12 md:col-4">
+									<p:outputLabel for="inicio" value="Data de Início" />
+									<p:datePicker id="inicio" value="#{vagaBean.dto.inicio}" />
+								</div>
+							</div>
+						</div>
+					</h:panelGroup>
+					<h:panelGroup class="card ui-fluid">
+						<div class="card">
+
+							<p:growl id="mfim" showDetail="true"
+								skipDetailIfEqualsSummary="true">
+								<p:autoUpdate />
+							</p:growl>
+							<div class="ui-fluid grid formgrid">
+								<div class="field col-12 md:col-4">
+									<p:outputLabel for="fim" value="Data do fim" />
+									<p:datePicker id="fim" value="#{vagaBean.dto.fim}" />
+								</div>
+							</div>
+						</div>
+					</h:panelGroup>
+					<p:commandButton value="Buscar"
+						action="#{vagaBean.buscarPorPeriodoOuTodos}"
+						styleClass="ui-button-warning" update="tabelaVagas mensagens" />
+				</h:panelGrid>
+				<h:panelGrid id="panelGridVaga" columns="6" style="width: 100%"
+					columnClasses="label, input">
+					<p:dataTable id="tabelaVagas" value="#{vagaBean.listaVagas}"
+						var="vaga" style="width: 100%"
+						emptyMessage="Nenhum vaga encontrado.">
+
+						<p:column headerText="ID">
+							<h:outputText value="#{vaga.id}" />
+						</p:column>
+
+						<p:column headerText="Data Início">
+							<h:outputText value="#{vaga.inicio}">
+								<f:convertDateTime pattern="dd/MM/yyyy" />
+							</h:outputText>
+						</p:column>
+
+						<p:column headerText="Data Fim">
+							<h:outputText value="#{vaga.fim}">
+								<f:convertDateTime pattern="dd/MM/yyyy" />
+							</h:outputText>
+						</p:column>
+						<p:column headerText="Quantidade">
+							<h:outputText value="#{vaga.quantidade}" />
+						</p:column>
+
+						<p:column headerText="Ações">
+							<p:commandButton value="Atualizar" process="@form @this"
+								actionListener="#{vagaBean.carregarVaga(vaga)}"
+								oncomplete="PF('dlgAtualizar').show()" update=":formDialog" />
+							<p:commandButton value="Deletar"
+								action="#{vagaBean.apagarVaga(vaga.id)}" process="@this" />
+						</p:column>
+					</p:dataTable>
+				</h:panelGrid>
+			</h:form>
+			<p:dialog id="dialogAtualizar" widgetVar="dlgAtualizar" modal="true"
+				header="Atualizar Vaga" resizable="false" width="600px">
+				<h:form id="formDialog">
+					<p:panelGrid columns="2" style="width: 100%">
+						<p:outputLabel for="idEdit" value="ID da Vaga" />
+						<h:inputText id="idEdit" value="#{vagaBean.dto.id}" disabled="true"/>
+
+						<p:outputLabel for="inicioEdit" value="Data Início" />
+						<p:datePicker id="inicioEdit" value="#{vagaBean.dto.inicio}"
+							mindate="#{vagaBean.minDate}" required="true"
+							requiredMessage="Por favor, preencha o campo data início." />
+
+						<p:outputLabel for="fimEdit" value="Data Fim" />
+						<p:datePicker id="fimEdit" value="#{vagaBean.dto.fim}"
+							mindate="#{vagaBean.minDate}" required="true"
+							requiredMessage="Por favor, preencha o campo data fim." />
+
+						<p:outputLabel for="quantidadeEdit" value="Quantidade" />
+						<p:inputText id="quantidadeEdit"
+							value="#{vagaBean.dto.quantidade}" required="true"
+							requiredMessage="Por favor, preencha o campo quantidade." />
+					</p:panelGrid>
+
+					<p:commandButton value="Salvar"
+						action="#{vagaBean.atualizarVaga(vagaBean.dto)}"
+						oncomplete="PF('dlgAtualizar').hide()"
+						update=":formPrincipal:tabelaVagas :formPrincipal:mensagens" />
+				</h:form>
+			</p:dialog>
+		</div>
+	</ui:define>
+</ui:composition>

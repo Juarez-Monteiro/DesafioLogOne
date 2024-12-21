@@ -1,0 +1,75 @@
+<ui:composition template="/pages/template/base.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+	<ui:define name="content">
+		<div class="container" id="container">
+			<h:form class="form-criar">
+				<p:messages id="mensagens" showDetail="true" closable="true"
+					globalOnly="true" style="width: 100%">
+					<p:autoUpdate />
+				</p:messages>
+				<h1 class="title">Criar Vagas</h1>
+
+				<h:panelGrid columns="3" style="width: 100%">
+
+					<h:panelGroup class="card ui-fluid">
+						<div class="card">
+
+							<p:growl id="minicio" showDetail="true"
+								skipDetailIfEqualsSummary="true">
+								<p:autoUpdate />
+							</p:growl>
+							<div class="ui-fluid grid formgrid">
+								<div class="field col-12 md:col-4">
+									<p:outputLabel for="inicio" value="Data de Início" />
+									<p:datePicker id="inicio" value="#{vagaBean.dto.inicio}"
+										required="true" pattern="dd/MM/yyyy"
+										mindate="#{vagaBean.minDate}"
+										requiredMessage="Por favor, preencha o campo data início." />
+
+								</div>
+							</div>
+						</div>
+					</h:panelGroup>
+					<h:panelGroup class="card ui-fluid">
+						<div class="card">
+
+							<p:growl id="mfim" showDetail="true"
+								skipDetailIfEqualsSummary="true">
+								<p:autoUpdate />
+							</p:growl>
+							<div class="ui-fluid grid formgrid">
+								<div class="field col-12 md:col-4">
+									<p:outputLabel for="fim" value="Data do fim" />
+									<p:datePicker id="fim" value="#{vagaBean.dto.fim}"
+										required="true" pattern="dd/MM/yyyy"
+										mindate="#{vagaBean.minDate}"
+										requiredMessage="Por favor, preencha o campo data fim." />
+
+								</div>
+							</div>
+						</div>
+					</h:panelGroup>
+					<h:panelGroup class="card ui-fluid">
+						<h:outputLabel value="Quantidade de vagas" />
+						<p:inputNumber value="#{vagaBean.dto.quantidade}" required="true"
+							requiredMessage="Por favor, preencha o campo quantidade."
+							modifyValueOnWheel="false" minValue="1" decimalPlaces="0" />
+					</h:panelGroup>
+				</h:panelGrid>
+				<div class="form-footer">
+					<p:commandButton value="Salvar" action="#{vagaBean.salvarVaga()}"
+						styleClass="ui-button-warning" update="@form mensagens"
+						process="@form @this" />
+					<p:commandButton value="Cancelar"
+						styleClass="ui-button-outlined ui-button-warning"
+						action="#{vagaBean.listarTodosVagas}" process="@this" />
+				</div>
+			</h:form>
+		</div>
+	</ui:define>
+</ui:composition>
