@@ -1,7 +1,7 @@
 package com.teste.pratico.domain.entity;
 
 import java.io.Serializable;
-import java.time.LocalDate;
+import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -20,7 +20,7 @@ public class AgendamentoEntity extends AbstractEntity implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Column(nullable = false)
-	private LocalDate data;
+	private Date data;
 	
 	@Column(nullable = false)
 	private String numero;

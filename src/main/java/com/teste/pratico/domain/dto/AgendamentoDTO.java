@@ -1,6 +1,6 @@
 package com.teste.pratico.domain.dto;
 
-import java.time.LocalDate;
+import java.util.Date;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -9,8 +9,9 @@ import lombok.Setter;
 @Setter
 public class AgendamentoDTO extends AbstractDTO{
 
-	private LocalDate data;
+	private Date data;
 	private String numero;
 	private String motivo;
 	private Long solicitante;
+	private String solicitanteNome;
 }

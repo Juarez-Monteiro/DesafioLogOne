@@ -1,6 +1,6 @@
 package com.teste.pratico.business.service;
 
-import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -16,6 +16,7 @@ import com.teste.pratico.domain.dto.AgendamentoDTO;
 import com.teste.pratico.domain.dto.AgendamentoResumoDTO;
 import com.teste.pratico.domain.dto.VagaComAgendamentoDTO;
 import com.teste.pratico.domain.entity.AgendamentoEntity;
+import com.teste.pratico.helpers.LogOneUtil;
 import com.teste.pratico.helpers.Mensagens;
 import com.teste.pratico.persistense.repository.AgendamentoRepository;
 import com.teste.pratico.persistense.repository.VagaRepository;
@@ -40,7 +41,8 @@ public class AgendamentoService {
 		trataCreate(dto);
 		AgendamentoEntity entity = mapper.toEntity(dto);
 		entity = repository.save(entity);
-		return String.format(Mensagens.AGENDAMENTO_SALVO, entity.getId(), entity.getData());
+		return String.format(Mensagens.AGENDAMENTO_SALVO, entity.getId(),
+				LogOneUtil.convertDataToString(entity.getData()));
 	}
 
 	public String update(AgendamentoDTO dto) {
@@ -55,7 +57,8 @@ public class AgendamentoService {
 			trataUpdate(entityFromBase, entityFromDto);
 			entityFromBase = repository.save(entityFromBase);
 
-			return String.format(Mensagens.AGENDAMENTO_ATUALIZADO, entityFromBase.getData());
+			return String.format(Mensagens.AGENDAMENTO_ATUALIZADO,
+					LogOneUtil.convertDataToString(entityFromBase.getData()));
 		}
 		throw new EntidadeNaoEncontradaException(String.format(Mensagens.AGENDAMENTO_NAO_LOCALIZADO, dto.getId()));
 	}
@@ -66,7 +69,7 @@ public class AgendamentoService {
 		if (optDtoBase.isPresent()) {
 			AgendamentoDTO dtoBase = optDtoBase.get();
 			repository.deleteById(dtoBase.getId());
-			return String.format(Mensagens.AGENDAMENTO_REMOVIDO, dtoBase.getData());
+			return String.format(Mensagens.AGENDAMENTO_REMOVIDO, LogOneUtil.convertDataToString(dtoBase.getData()));
 		}
 		throw new EntidadeNaoEncontradaException(String.format(Mensagens.AGENDAMENTO_NAO_LOCALIZADO));
 	}
@@ -79,17 +82,13 @@ public class AgendamentoService {
 		return Optional.empty();
 	}
 
-	public List<AgendamentoResumoDTO> resumoAgendamentos(LocalDate inicio, LocalDate fim, Long solicitanteId) {
-
-		List<AgendamentoResumoDTO> resultados = repository.calcularResumoAgendamentos(inicio, fim, solicitanteId);
-		for (AgendamentoResumoDTO dto : resultados) {
-			dto.calcularPercentual();
-		}
-		return resultados;
+	public List<AgendamentoResumoDTO> resumoAgendamentos(Date inicio, Date fim, Long solicitanteId) {
+		return repository.calcularResumoAgendamentos(inicio, fim, solicitanteId);
 	}
 
-	public List<AgendamentoEntity> buscarAgendamentosPorPeriodo(LocalDate inicio, LocalDate fim, Long solicitanteId) {
-		return repository.listarSolicitantePorPeriodo(inicio, fim, solicitanteId);
+	public List<AgendamentoDTO> buscarAgendamentosPorPeriodo(Date inicio, Date fim, Long solicitanteId) {
+		List<AgendamentoEntity> agendamentos = repository.listarSolicitantePorPeriodo(inicio, fim, solicitanteId);
+		return mapper.toDTOList(agendamentos);
 	}
 
 	private void jaExiste(AgendamentoDTO dto) {
@@ -101,7 +100,8 @@ public class AgendamentoService {
 		VagaComAgendamentoDTO vagaDTO = montarVaga(dto);
 
 		if (vagaDTO.getTotalAgendamentos() >= vagaDTO.getQuantidade()) {
-			throw new LimiteExcedidoException(String.format(Mensagens.NAO_HA_VAGAS_PARA_DATA, dto.getData()));
+			throw new LimiteExcedidoException(
+					String.format(Mensagens.NAO_HA_VAGAS_PARA_DATA, LogOneUtil.convertDataToString(dto.getData())));
 		}
 
 		int limitePermitido = (int) Math.ceil(vagaDTO.getQuantidade() * 0.25);
@@ -125,7 +125,8 @@ public class AgendamentoService {
 
 		Optional<VagaComAgendamentoDTO> opt = vagaRepository.buscarVagaComTotalAgendamentos(dto.getData());
 		if (opt.isEmpty()) {
-			throw new ViolacaoRegraNegocioException(String.format(Mensagens.VAGA_NAO_ENCONTRADA_DATA, dto.getData()));
+			throw new ViolacaoRegraNegocioException(
+					String.format(Mensagens.VAGA_NAO_ENCONTRADA_DATA, LogOneUtil.convertDataToString(dto.getData())));
 		}
 		VagaComAgendamentoDTO vDTO = opt.get();
 		return vDTO;

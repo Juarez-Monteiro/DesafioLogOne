@@ -1,5 +1,7 @@
 package com.teste.pratico.business.converter;
 
+import java.util.List;
+
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;
@@ -16,7 +18,10 @@ public interface AgendamentoMapper extends MapperI<AgendamentoEntity, Agendament
 	public AgendamentoEntity toEntity(AgendamentoDTO dto);
 	
 	@Mapping(target = "solicitante", source = "solicitante.id")
+	@Mapping(target = "solicitanteNome", source = "solicitante.nome")
 	public AgendamentoDTO toDto(AgendamentoEntity ent);
+	
+	List<AgendamentoDTO> toDTOList(List<AgendamentoEntity> entities);
 	
 	@Named("createSoliciFromID")
 	default SolicitanteEntity createSoliciFromID(Long id) {

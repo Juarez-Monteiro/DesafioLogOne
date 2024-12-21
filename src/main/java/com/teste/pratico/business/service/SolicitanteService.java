@@ -37,9 +37,24 @@ public class SolicitanteService {
 		}
 		return retorno;
 	}
+	public List<SolicitanteDTO> buscarTodosContemNome(String nome) {
+		Iterable<SolicitanteEntity> listEntity = repository.findByNomeContainingIgnoreCase(nome);
+		List<SolicitanteDTO> retorno = new ArrayList<>();
+		if (!LogOneUtil.nuloOuVazio(listEntity)) {
+			listEntity.forEach(entity -> retorno.add(mapper.toDto(entity)));
+		}
+		return retorno;
+	}
 
 	public Optional<SolicitanteDTO> findById(Long id) {
 		Optional<SolicitanteEntity> optEntity = repository.findById(id);
+		if (optEntity.isPresent()) {
+			return Optional.of(mapper.toDto(optEntity.get()));
+		}
+		return Optional.empty();
+	}
+	public Optional<SolicitanteDTO> findByNome(String nome) {
+		Optional<SolicitanteEntity> optEntity = repository.findByNome(nome);
 		if (optEntity.isPresent()) {
 			return Optional.of(mapper.toDto(optEntity.get()));
 		}

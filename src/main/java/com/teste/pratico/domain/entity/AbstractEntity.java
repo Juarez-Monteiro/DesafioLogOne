@@ -6,6 +6,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
 
+import com.teste.pratico.helpers.LogOneUtil;
+
 import lombok.Getter;
 import lombok.Setter;
 
@@ -18,4 +20,8 @@ public abstract class AbstractEntity {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(nullable = false)
 	private Long id;
+	
+	public boolean isNew() {
+		return LogOneUtil.nuloOuVazio(this.id);
+	}
 }

@@ -1,7 +1,9 @@
 package com.teste.pratico.business.service;
 
 import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -25,14 +27,26 @@ public class VagaService {
 
 	private final VagaRepository repository;
 	private final VagaMapper mapper;
-	
+
 	public VagaService(VagaRepository repository, VagaMapper mapper) {
 		this.repository = repository;
 		this.mapper = mapper;
 	}
-	
-	public List<VagaDTO> findAll() {
-		Iterable<VagaEntity> listEntity = repository.findAll();
+
+	public List<VagaDTO> buscaPorPeriodo(Date inicio, Date fim) {
+
+		Iterable<VagaEntity> listEntity;
+
+		if (!LogOneUtil.nuloOuVazio(inicio) && !LogOneUtil.nuloOuVazio(fim)) {
+			listEntity = repository.findVagasInPeriodo(inicio, fim);
+		} else if (!LogOneUtil.nuloOuVazio(inicio) && LogOneUtil.nuloOuVazio(fim)) {
+			listEntity = repository.findVagasInInicio(inicio);
+		} else if (LogOneUtil.nuloOuVazio(inicio) && !LogOneUtil.nuloOuVazio(fim)) {
+			listEntity = repository.findVagasInFim(fim);
+		} else {
+			listEntity = repository.findAll();
+		}
+
 		List<VagaDTO> retorno = new ArrayList<>();
 		if (!LogOneUtil.nuloOuVazio(listEntity)) {
 			listEntity.forEach(entity -> retorno.add(mapper.toDto(entity)));
@@ -53,14 +67,15 @@ public class VagaService {
 		validaRegrasNegocio(dto);
 		VagaEntity entity = mapper.toEntity(dto);
 		entity = repository.save(entity);
-		return String.format(Mensagens.VAGA_SALVA, entity.getInicio(),entity.getFim());
+		return String.format(Mensagens.VAGA_SALVA, LogOneUtil.convertDataToString(entity.getInicio()),
+				LogOneUtil.convertDataToString(entity.getFim()));
 	}
 
 	public String update(VagaDTO dto) {
 		Optional<VagaEntity> optEntityBase = repository.findById(dto.getId());
 		if (optEntityBase.isPresent()) {
-			
-			jaExiste(dto); // verificar como desconsiderar o atual
+
+			jaExiste(dto);
 			validaRegrasNegocio(dto);
 
 			VagaEntity entityFromBase = optEntityBase.get();
@@ -69,9 +84,10 @@ public class VagaService {
 			trataUpdate(entityFromBase, entityFromDto);
 			entityFromBase = repository.save(entityFromBase);
 
-			return String.format(Mensagens.VAGA_ATUALIZADA, entityFromBase.getInicio(),entityFromBase.getFim());
+			return String.format(Mensagens.VAGA_ATUALIZADA, LogOneUtil.convertDataToString(entityFromBase.getInicio()),
+					LogOneUtil.convertDataToString(entityFromBase.getFim()));
 		}
-	throw new EntidadeNaoEncontradaException(String.format(Mensagens.VAGA_NAO_LOCALIZADA,dto.getId()));
+		throw new EntidadeNaoEncontradaException(String.format(Mensagens.VAGA_NAO_LOCALIZADA, dto.getId()));
 	}
 
 	@Transactional(propagation = Propagation.REQUIRED)
@@ -81,24 +97,28 @@ public class VagaService {
 			VagaDTO dtoBase = optDtoBase.get();
 			verificaAgendamentoExistente(dtoBase);
 			repository.deleteById(dtoBase.getId());
-			return String.format(Mensagens.VAGA_REMOVIDA, dtoBase.getInicio(), dtoBase.getFim());
+			return String.format(Mensagens.VAGA_REMOVIDA, LogOneUtil.convertDataToString(dtoBase.getInicio()),
+					LogOneUtil.convertDataToString(dtoBase.getFim()));
 		}
 		throw new EntidadeNaoEncontradaException(String.format(Mensagens.VAGA_NAO_LOCALIZADA, id));
 	}
-		
+
 	private void jaExiste(VagaDTO dto) {
-		Optional<VagaEntity> opt = repository.findVagasInPeriodo(dto.getInicio(), dto.getFim());
-		if (opt.isPresent()) {
-			 throw new EntidadeExisteException(String.format(Mensagens.VAGA_EXISTENTE, dto.getInicio(), dto.getFim()));
-		   }
-	}
-		
-	private  void validaRegrasNegocio(VagaDTO dto) {
-		if (dto.getInicio().isAfter(dto.getFim())) {
-		    throw new ViolacaoRegraNegocioException(String.format(Mensagens.DATA_INICIO_POSTERIOR_FIM));
+		List<VagaEntity> lista = repository.findVagasInPeriodo(dto.getInicio(), dto.getFim());
+
+		if (!LogOneUtil.nuloOuVazio(lista)) {
+			throw new EntidadeExisteException(String.format(Mensagens.VAGA_EXISTENTE,
+					LogOneUtil.convertDataToString(dto.getInicio()), LogOneUtil.convertDataToString(dto.getFim())));
 		}
-		if (dto.getInicio().isBefore(LocalDate.now())) {
-			 throw new ViolacaoRegraNegocioException(String.format(Mensagens.DATA_INICIO_ANTERIOR_HOJE));
+	}
+
+	private void validaRegrasNegocio(VagaDTO dto) {
+		if (dto.getInicio().after(dto.getFim())) {
+			throw new ViolacaoRegraNegocioException(String.format(Mensagens.DATA_INICIO_POSTERIOR_FIM));
+		}
+
+		if (dto.getInicio().toInstant().atZone(ZoneId.systemDefault()).toLocalDate().isBefore(LocalDate.now())) {
+			throw new ViolacaoRegraNegocioException(String.format(Mensagens.DATA_INICIO_ANTERIOR_HOJE));
 		}
 	}
 
@@ -106,15 +126,15 @@ public class VagaService {
 		entBD.setInicio(ent.getInicio());
 		entBD.setFim(ent.getFim());
 		entBD.setQuantidade(ent.getQuantidade());
-		
+
 	}
-	
+
 	private void verificaAgendamentoExistente(VagaDTO dto) {
-		Boolean existe = repository.existeAgendamentoEntreDatas(dto.getInicio(),dto.getFim());
+		Boolean existe = repository.existeAgendamentoEntreDatas(dto.getInicio(), dto.getFim());
 		if (existe) {
-		    throw new ViolacaoRegraNegocioException(String.format(Mensagens.EXISTE_AGENDAMETO));
+			throw new ViolacaoRegraNegocioException(String.format(Mensagens.EXISTE_AGENDAMETO));
 		}
-	
+
 	}
-	
+
 }
