@@ -6,15 +6,15 @@
 	xmlns:f="http://xmlns.jcp.org/jsf/core">
 
 	<ui:define name="content">
-	<h:outputScript name="locales/locale-pt.js" library="primefaces" />
+		<h:outputScript name="locales/locale-pt.js" library="primefaces" />
 		<div class="container" id="container">
-			<h:form class="form-manter">
+			<h:form id="formPrincipal" class="formPrincipal">
 				<p:growl id="growl" showDetail="true"
 					skipDetailIfEqualsSummary="true" globalOnly="true" life="5000">
 					<p:autoUpdate />
 				</p:growl>
 
-				<h1 class="title">Solicitante</h1>
+				<h1 class="title">Solicitantes</h1>
 
 				<h:panelGrid columns="3" style="width: 100%"
 					columnClasses="label, input">
@@ -22,32 +22,52 @@
 					<p:inputText style="width: 100%" id="filtroNome"
 						value="#{solicitanteBean.filtroNome}" />
 					<p:commandButton value="Buscar"
-						action="#{solicitanteBean.buscarPorNomeOuTodos}"
-						styleClass="mr-2"
+						action="#{solicitanteBean.buscarPorNomeOuTodos}" styleClass="mr-2"
 						update="tabelaSolicitantes growl" />
 				</h:panelGrid>
 				<h:panelGrid columns="4" style="width: 100%"
 					columnClasses="label, input">
-					<p:dataTable id="tabelaSolicitantes"
+					<p:dataTable id="tabelaSolicitantes"  editable="true" editMode="row"
 						value="#{solicitanteBean.listaSolicitantes}" var="solicitante"
 						style="width: 100%" emptyMessage="Nenhum solicitante encontrado.">
-
-						<p:column headerText="ID">
-							<h:outputText value="#{solicitante.id}"/>
-						</p:column>
-
-						<p:column headerText="Nome">
-							<h:outputText value="#{solicitante.nome}" />
-						</p:column>
-
-						<p:column headerText="Ações">
+						
+						<p:ajax event="rowEdit" listener="#{solicitanteBean.atualizarSolicitante}"
+							update=":formPrincipal:tabelaSolicitantes :formPrincipal:growl" />
+						<p:ajax event="rowEditCancel"
+							update=":formPrincipal:tabelaSolicitantes :formPrincipal:growl" />
 							
-								<p:commandButton value="Atualizar"
-									action="#{solicitanteBean.atualizarSolicitante(solicitante)}"
-									update="tabelaSolicitantes" process="@this" />
-								<p:commandButton value="Deletar"
-									action="#{solicitanteBean.apagarSolicitante(solicitante.id)}"
-									 process="@this" />
+						<p:column headerText="ID">
+							<p:cellEditor>
+								<f:facet name="output">
+									<h:outputText value="#{solicitante.id}" />
+								</f:facet>
+								<f:facet name="input">
+									<p:inputText value="#{solicitante.id}"  disabled="true" />
+								</f:facet>
+							</p:cellEditor>
+						</p:column>
+							
+						<p:column headerText="Nome">
+							<p:cellEditor>
+								<f:facet name="output">
+									<h:outputText value="#{solicitante.nome}" />
+								</f:facet>
+								<f:facet name="input">
+									<p:inputText value="#{solicitante.nome}" />
+								</f:facet>
+							</p:cellEditor>
+						</p:column>
+
+						<p:column style="width:8rem" headerText="Editar">
+							<p:rowEditor editTitle="Editar" cancelTitle="Cancelar"
+								saveTitle="Salvar" />
+						</p:column>
+
+						<p:column style="width:8rem" headerText="Apagar">
+							<p:commandButton icon="pi pi-fw pi-trash" title="Excluir"
+								actionListener="#{solicitanteBean.apagarSolicitante(solicitante.id)}"
+								update=":formPrincipal:tabelaSolicitantes :formPrincipal:growl"
+								styleClass="rounded-button ui-button-danger" />
 						</p:column>
 					</p:dataTable>
 				</h:panelGrid>

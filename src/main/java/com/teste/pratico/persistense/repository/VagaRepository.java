@@ -29,6 +29,7 @@ public interface VagaRepository extends JpaRepository<VagaEntity, Long> {
 			+ "WHERE v.inicio <= :data AND v.fim >= :data " + "GROUP BY v.id, v.inicio, v.fim, v.quantidade")
 	Optional<VagaComAgendamentoDTO> buscarVagaComTotalAgendamentos(@Param("data") Date data);
 
-	@Query(value = "SELECT EXISTS (SELECT 1 FROM agendamentos a WHERE a.data BETWEEN :inicio AND :fim)", nativeQuery = true)
+	@Query("SELECT CASE WHEN COUNT(a) > 0 THEN true ELSE false END " +
+		       "FROM AgendamentoEntity a WHERE a.data BETWEEN  :inicio AND :fim ")
 	boolean existeAgendamentoEntreDatas(@Param("inicio") Date inicio, @Param("fim") Date fim);
 }

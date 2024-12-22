@@ -6,7 +6,7 @@
 	xmlns:f="http://xmlns.jcp.org/jsf/core">
 
 	<ui:define name="content">
-	<h:outputScript name="locales/locale-pt.js" library="primefaces" />
+		<h:outputScript name="locales/locale-pt.js" library="primefaces" />
 		<div class="container" id="container">
 			<h:form id="formPrincipal" class="formPrincipal">
 				<p:growl id="growl" showDetail="true"
@@ -42,11 +42,11 @@
 						</div>
 					</h:panelGroup>
 					<p:commandButton value="Buscar"
-						action="#{vagaBean.buscarPorPeriodoOuTodos}"
-						styleClass="mr-2" update="@form tabelaVagas growl" />
+						action="#{vagaBean.buscarPorPeriodoOuTodos}" styleClass="mr-2"
+						update="@form tabelaVagas growl" />
 				</h:panelGrid>
 
-				<h:panelGrid id="panelGridVaga" columns="6" style="width: 100%"
+				<h:panelGrid id="panelGridVaga" columns="7" style="width: 100%"
 					columnClasses="label, input">
 					<p:dataTable id="tabelaVagas" value="#{vagaBean.listaVagas}"
 						var="vaga" style="width: 100%" editable="true" editMode="row"
@@ -54,9 +54,8 @@
 
 						<p:ajax event="rowEdit" listener="#{vagaBean.atualizarVaga}"
 							update=":formPrincipal:tabelaVagas :formPrincipal:growl" />
-						<p:ajax event="rowEditCancel"
-							listener="#{vagaBean.onRowEditCancel}"
-							update=":formPrincipal:growl" />
+						<p:ajax event="rowEditCancel" 
+							update=":formPrincipal:tabelaVagas :formPrincipal:growl" />
 
 						<p:column headerText="ID">
 							<p:cellEditor>
@@ -106,9 +105,17 @@
 							</p:cellEditor>
 						</p:column>
 
-						<p:column style="width:8rem">
+						<p:column style="width:8rem" headerText="Editar">
 							<p:rowEditor editTitle="Editar" cancelTitle="Cancelar"
-								saveTitle="Salvar" />
+								saveTitle="Salvar" 
+								styleClass="custom-row-editor"/>
+						</p:column>
+
+						<p:column style="width:8rem" headerText="Apagar">
+							<p:commandButton icon="pi pi-fw pi-trash" title="Excluir"
+								actionListener="#{vagaBean.apagarVaga(vaga.id)}"
+								update=":formPrincipal:tabelaVagas :formPrincipal:growl"
+								styleClass="rounded-button ui-button-danger" />
 						</p:column>
 					</p:dataTable>
 				</h:panelGrid>

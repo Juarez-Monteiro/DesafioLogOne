@@ -7,22 +7,17 @@ import java.util.List;
 import java.util.Optional;
 
 import javax.annotation.ManagedBean;
-import javax.faces.application.FacesMessage;
-import javax.faces.context.FacesContext;
+import javax.faces.view.ViewScoped;
 
 import org.primefaces.event.RowEditEvent;
-import org.springframework.web.context.annotation.RequestScope;
 
-import com.teste.pratico.business.exception.ViolacaoRegraNegocioException;
 import com.teste.pratico.business.service.VagaService;
 import com.teste.pratico.domain.dto.VagaDTO;
-import com.teste.pratico.helpers.LogOneUtil;
-import com.teste.pratico.helpers.Mensagens;
 
 import lombok.Data;
 
 @ManagedBean
-@RequestScope
+@ViewScoped
 @Data
 public class VagaBean extends AbstractBean {
 
@@ -60,8 +55,8 @@ public class VagaBean extends AbstractBean {
 
 	}
 
-	public void atualizarVaga(VagaDTO dto) {
-
+	public void atualizarVaga(RowEditEvent<VagaDTO> event) {
+	    VagaDTO dto = event.getObject();
 		try {
 			String mensagem = service.update(dto);
 			infoMensagem(mensagem);

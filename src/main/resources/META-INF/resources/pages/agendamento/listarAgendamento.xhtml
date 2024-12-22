@@ -6,9 +6,9 @@
 	xmlns:f="http://xmlns.jcp.org/jsf/core">
 
 	<ui:define name="content">
-	<h:outputScript name="locales/locale-pt.js" library="primefaces" />
+		<h:outputScript name="locales/locale-pt.js" library="primefaces" />
 		<div class="container" id="container">
-			<h:form class="form-manter">
+			<h:form id="formPrincipal" class="formPrincipal">
 				<p:growl id="growl" showDetail="true"
 					skipDetailIfEqualsSummary="true" globalOnly="true" life="5000">
 					<p:autoUpdate />
@@ -70,45 +70,95 @@
 					</h:panelGroup>
 					<p:commandButton value="Buscar"
 						action="#{agendamentoBean.listarAgendamentosPorPeriodo}"
-						styleClass="mr-2"
-						update="@form:tabelaAgendamentos growl" process="@form" />
+						styleClass="mr-2" update="@form:tabelaAgendamentos growl"
+						process="@form" />
 				</h:panelGrid>
 				<h:panelGrid columns="7" style="width: 100%"
 					columnClasses="label, input">
 					<p:dataTable id="tabelaAgendamentos"
 						value="#{agendamentoBean.listaAgendamentos}" var="agendamento"
-						style="width: 100%" emptyMessage="Nenhum agendamento encontrado.">
+						editable="true" editMode="row" style="width: 100%"
+						emptyMessage="Nenhum agendamento encontrado.">
 
-						<p:column headerText="ID">
-							<h:outputText value="#{agendamento.id}" />
+						<p:ajax event="rowEdit"
+							listener="#{agendamentoBean.atualizarAgendamento}"
+							update=":formPrincipal:tabelaAgendamentos :formPrincipal:growl" />
+						<p:ajax event="rowEditCancel"
+							update=":formPrincipal:tabelaAgendamentos :formPrincipal:growl" />
+
+						<p:column headerText="ID" width="5%">
+							<p:cellEditor>
+								<f:facet name="output">
+									<h:outputText value="#{agendamento.id}" />
+								</f:facet>
+								<f:facet name="input">
+									<p:inputText value="#{agendamento.id}" disabled="true" />
+								</f:facet>
+							</p:cellEditor>
 						</p:column>
 
-						<p:column headerText="Número Agendamento">
-							<h:outputText value="#{agendamento.numero}" />
+						<p:column headerText="Número Agendamento" width="10%">
+							<p:cellEditor>
+								<f:facet name="output">
+									<h:outputText value="#{agendamento.numero}" />
+								</f:facet>
+								<f:facet name="input">
+									<p:inputText value="#{agendamento.numero}" disabled="true" />
+								</f:facet>
+							</p:cellEditor>
 						</p:column>
 
-						<p:column headerText="Data">
-							<h:outputText value="#{agendamento.data}">
-								<f:convertDateTime pattern="dd/MM/yyyy" />
-							</h:outputText>
+						<p:column headerText="Data" width="10%">
+							<p:cellEditor>
+								<f:facet name="output">
+									<h:outputText value="#{agendamento.data}">
+										<f:convertDateTime pattern="dd/MM/yyyy" />
+									</h:outputText>
+								</f:facet>
+								<f:facet name="input">
+									<p:datePicker value="#{agendamento.data}" pattern="dd/MM/yyyy"
+										mindate="#{agendamentoBean.minDate}" />
+								</f:facet>
+							</p:cellEditor>
 						</p:column>
 
 						<p:column headerText="Motivo" width="20%">
-							<h:outputText value="#{agendamento.motivo}" />
+							<p:cellEditor>
+								<f:facet name="output">
+									<h:outputText value="#{agendamento.motivo}" />
+								</f:facet>
+								<f:facet name="input">
+									<p:inputText value="#{agendamento.motivo}" />
+								</f:facet>
+							</p:cellEditor>
 						</p:column>
 
-						<p:column headerText="Solicitante" width="20%">
-							<h:outputText
-								value="#{agendamento.solicitante} - #{agendamento.solicitanteNome} " />
+						<p:column headerText="Solicitante" width="25%">
+							<p:cellEditor>
+								<f:facet name="output">
+									<h:outputText
+										value="#{agendamento.solicitante} - #{agendamento.solicitanteNome} " />
+								</f:facet>
+								<f:facet name="input">
+									<p:inputText
+										value="#{agendamento.solicitante} - #{agendamento.solicitanteNome} "
+										disabled="true" />
+								</f:facet>
+							</p:cellEditor>
 						</p:column>
 
-						<p:column headerText="Ações">
-
-							<p:commandButton value="Atualizar" styleClass="mr-2"
-								action="#{agendamentoBean.atualizarAgendamento(agendamento)}"
-								update="@form:tabelaAgendamentos" process="@this" />
-
+						<p:column style="width:8rem" headerText="Editar">
+							<p:rowEditor editTitle="Editar" cancelTitle="Cancelar"
+								saveTitle="Salvar" styleClass="custom-row-editor" />
 						</p:column>
+
+						<p:column style="width:8rem" headerText="Apagar">
+							<p:commandButton icon="pi pi-fw pi-trash" title="Excluir"
+								actionListener="#{agendamentoBean.apagarAgendamento(agendamento.id)}"
+								update=":formPrincipal:tabelaAgendamentos :formPrincipal:growl"
+								styleClass="rounded-button ui-button-danger" />
+						</p:column>
+
 					</p:dataTable>
 				</h:panelGrid>
 			</h:form>

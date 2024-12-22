@@ -11,7 +11,9 @@ import org.springframework.transaction.annotation.Transactional;
 import com.teste.pratico.business.converter.SolicitanteMapper;
 import com.teste.pratico.business.exception.EntidadeExisteException;
 import com.teste.pratico.business.exception.EntidadeNaoEncontradaException;
+import com.teste.pratico.business.exception.ViolacaoRegraNegocioException;
 import com.teste.pratico.domain.dto.SolicitanteDTO;
+import com.teste.pratico.domain.dto.VagaDTO;
 import com.teste.pratico.domain.entity.SolicitanteEntity;
 import com.teste.pratico.helpers.LogOneUtil;
 import com.teste.pratico.helpers.Mensagens;
@@ -88,6 +90,7 @@ public class SolicitanteService {
 
 	@Transactional(propagation = Propagation.REQUIRED)
 	public String delete(Long id) {
+		verificaAgendamentoExistente(id);
 		Optional<SolicitanteDTO> optDtoBase = this.findById(id);
 		if (optDtoBase.isPresent()) {
 			SolicitanteDTO dtoBase = optDtoBase.get();
@@ -110,6 +113,14 @@ public class SolicitanteService {
 
 	private void trataUpdate(SolicitanteEntity entBD, SolicitanteEntity ent) {
 		entBD.setNome(ent.getNome());
+	}
+	
+	private void verificaAgendamentoExistente(Long id) {
+		Boolean existe = repository.existeAgendamentoSolicitante(id);
+		if (existe) {
+			throw new ViolacaoRegraNegocioException(String.format(Mensagens.EXISTE_AGENDAMETO_SOLICITANTE));
+		}
+
 	}
 	
 }
