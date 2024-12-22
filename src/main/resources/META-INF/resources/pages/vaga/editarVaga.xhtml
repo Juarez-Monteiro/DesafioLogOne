@@ -1,0 +1,126 @@
+<ui:composition template="/pages/template/base.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+	<ui:define name="content">
+		<h:outputScript name="locales/locale-pt.js" library="primefaces" />
+		<div class="container" id="container">
+			<h:form id="formPrincipal" class="formPrincipal">
+				<p:growl id="growl" showDetail="true"
+					skipDetailIfEqualsSummary="true" globalOnly="true" life="5000">
+					<p:autoUpdate />
+				</p:growl>
+				<p:growl id="mcampos" showDetail="true"
+					skipDetailIfEqualsSummary="true" life="5000">
+					<p:autoUpdate />
+				</p:growl>
+
+				<h1 class="title">Listar vagas</h1>
+
+				<h:panelGrid columns="3" style="width: 100%">
+					<h:panelGroup class="card ui-fluid">
+						<div class="card">
+							<div class="ui-fluid grid formgrid">
+								<div class="field col-12 md:col-4">
+									<p:outputLabel for="inicio" value="Data de Início" />
+									<p:datePicker id="inicio" value="#{vagaBean.dto.inicio}" />
+								</div>
+							</div>
+						</div>
+					</h:panelGroup>
+					<h:panelGroup class="card ui-fluid">
+						<div class="card">
+							<div class="ui-fluid grid formgrid">
+								<div class="field col-12 md:col-4">
+									<p:outputLabel for="fim" value="Data do fim" />
+									<p:datePicker id="fim" value="#{vagaBean.dto.fim}" />
+								</div>
+							</div>
+						</div>
+					</h:panelGroup>
+					<p:commandButton value="Buscar"
+						action="#{vagaBean.buscarPorPeriodoOuTodos}" styleClass="mr-2"
+						update="@form tabelaVagas growl" />
+				</h:panelGrid>
+
+				<h:panelGrid id="panelGridVaga" columns="7" style="width: 100%"
+					columnClasses="label, input">
+					<p:dataTable id="tabelaVagas" value="#{vagaBean.listaVagas}"
+						var="vaga" style="width: 100%" editable="true" editMode="row"
+						emptyMessage="Nenhuma vaga encontrada.">
+
+						<p:ajax event="rowEdit" listener="#{vagaBean.atualizarVaga}"
+							update=":formPrincipal:tabelaVagas :formPrincipal:growl" />
+						<p:ajax event="rowEditCancel" 
+							update=":formPrincipal:tabelaVagas :formPrincipal:growl" />
+
+						<p:column headerText="ID">
+							<p:cellEditor>
+								<f:facet name="output">
+									<h:outputText value="#{vaga.id}" />
+								</f:facet>
+								<f:facet name="input">
+									<p:inputText value="#{vaga.id}" disabled="true" />
+								</f:facet>
+							</p:cellEditor>
+						</p:column>
+
+						<p:column headerText="Data Início">
+							<p:cellEditor>
+								<f:facet name="output">
+									<h:outputText value="#{vaga.inicio}">
+										<f:convertDateTime pattern="dd/MM/yyyy" />
+									</h:outputText>
+								</f:facet>
+								<f:facet name="input">
+									<p:datePicker value="#{vaga.inicio}" pattern="dd/MM/yyyy" />
+								</f:facet>
+							</p:cellEditor>
+						</p:column>
+
+						<p:column headerText="Data Fim">
+							<p:cellEditor>
+								<f:facet name="output">
+									<h:outputText value="#{vaga.fim}">
+										<f:convertDateTime pattern="dd/MM/yyyy" />
+									</h:outputText>
+								</f:facet>
+								<f:facet name="input">
+									<p:datePicker value="#{vaga.fim}" pattern="dd/MM/yyyy" />
+								</f:facet>
+							</p:cellEditor>
+						</p:column>
+
+						<p:column headerText="Quantidade">
+							<p:cellEditor>
+								<f:facet name="output">
+									<h:outputText value="#{vaga.quantidade}" />
+								</f:facet>
+								<f:facet name="input">
+									<p:inputNumber value="#{vaga.quantidade}" />
+								</f:facet>
+							</p:cellEditor>
+						</p:column>
+
+						<p:column style="width:8rem" headerText="Editar">
+							<p:rowEditor editTitle="Editar" cancelTitle="Cancelar"
+								saveTitle="Salvar" 
+								styleClass="custom-row-editor"/>
+						</p:column>
+
+						<p:column style="width:8rem" headerText="Apagar">
+							<p:commandButton icon="pi pi-fw pi-trash" title="Excluir"
+								actionListener="#{vagaBean.apagarVaga(vaga.id)}"
+								update=":formPrincipal:tabelaVagas :formPrincipal:growl"
+								styleClass="rounded-button ui-button-danger" />
+						</p:column>
+					</p:dataTable>
+				</h:panelGrid>
+			</h:form>
+
+		</div>
+	</ui:define>
+</ui:composition>

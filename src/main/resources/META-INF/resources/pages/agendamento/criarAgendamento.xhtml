@@ -1,0 +1,80 @@
+<ui:composition template="/pages/template/base.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+	<ui:define name="content">
+	<h:outputScript name="locales/locale-pt.js" library="primefaces" />
+		<div class="container" id="container">
+			<h:form class="form-criar">
+				<p:growl id="growl" showDetail="true"
+					skipDetailIfEqualsSummary="true" globalOnly="true" life="5000">
+					<p:autoUpdate />
+				</p:growl>
+				<p:growl id="mcampos" showDetail="true"
+					skipDetailIfEqualsSummary="true" life="5000">
+					<p:autoUpdate />
+				</p:growl>
+				<h1 class="title">Criar Agendamentos</h1>
+
+				<h:panelGrid columns="3" style="width: 100%">
+
+					<h:panelGroup class="card ui-fluid">
+						<div class="card">
+							<div class="ui-fluid grid formgrid">
+								<div class="field col-12 md:col-4">
+									<p:outputLabel for="data" value="Data do Agendamento" />
+									<p:datePicker id="data" value="#{agendamentoBean.dto.data}"
+										required="true" pattern="dd/MM/yyyy"
+										mindate="#{agendamentoBean.minDate}"
+										requiredMessage="Por favor, preencha o campo data." />
+								</div>
+							</div>
+						</div>
+					</h:panelGroup>
+					<h:panelGroup class="card ui-fluid">
+						<h:panelGroup class="card ui-fluid">
+							<h:outputLabel value="Motivo do agendamento" />
+							<p:inputText value="#{agendamentoBean.dto.motivo}"
+								required="true"
+								requiredMessage="Por favor, preencha o campo motivo do agendamento." />
+						</h:panelGroup>
+					</h:panelGroup>
+					<h:panelGroup class="card ui-fluid">
+						<p:outputLabel for="dropdownSolicitante"
+							value="Selecione um solicitante:" />
+
+						<p:selectOneMenu id="dropdownSolicitante"
+							value="#{agendamentoBean.dto.solicitante}" style="width: 100%"
+							required="true" requiredMessage="Selecione um solicitante!"
+							onfocus="PF('carregarSolicitantesWidget').click(); alert('Comando acionado');">
+							<f:selectItem itemLabel="Selecione" itemValue="" />
+							<f:selectItems value="#{agendamentoBean.solicitantes}"
+								var="solicitante"
+								itemLabel="#{solicitante.id} - #{solicitante.nome}"
+								itemValue="#{solicitante.id}" />
+						</p:selectOneMenu>
+
+						<p:remoteCommand name="carregarSolicitantesWidget"
+							action="#{agendamentoBean.carregarSolicitantes}"
+							update="@form:dropdownSolicitante" process="@this" />
+
+						<p:spacer height="10" />
+
+					</h:panelGroup>
+				</h:panelGrid>
+				<div class="form-footer">
+					<p:commandButton value="Salvar"
+						action="#{agendamentoBean.salvarAgendamento()}"
+						styleClass="mr-2" update="@form growl"
+						process="@form @this" />
+					<p:commandButton value="Limpar"
+						styleClass="mr-2 ui-button-warning" process="@this"
+						update="@form  @this" resetInput="true" />
+				</div>
+			</h:form>
+		</div>
+	</ui:define>
+</ui:composition>

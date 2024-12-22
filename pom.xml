@@ -91,6 +91,14 @@
 			<version>${lombok.version}</version>
 			<scope>provided</scope>
 		</dependency>
+		
+		<!--ADD-->
+		<dependency>
+			<groupId>org.mapstruct</groupId>
+			<artifactId>mapstruct</artifactId>
+			<version>${org.mapstruct.version}</version>
+		</dependency>
+		
 	</dependencies>
 
 	<build>
