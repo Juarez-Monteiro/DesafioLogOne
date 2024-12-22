@@ -6,24 +6,23 @@
 	xmlns:f="http://xmlns.jcp.org/jsf/core">
 
 	<ui:define name="content">
+	<h:outputScript name="locales/locale-pt.js" library="primefaces" />
 		<div class="container" id="container">
 			<h:form id="formPrincipal" class="formPrincipal">
-				<p:messages id="mensagens" showDetail="true" closable="true"
-					globalOnly="true" style="width: 100%">
+				<p:growl id="growl" showDetail="true"
+					skipDetailIfEqualsSummary="true" globalOnly="true" life="5000">
 					<p:autoUpdate />
-				</p:messages>
-
+				</p:growl>
+				<p:growl id="mcampos" showDetail="true"
+					skipDetailIfEqualsSummary="true" life="5000">
+					<p:autoUpdate />
+				</p:growl>
 				<h1 class="title">Listar vagas</h1>
 
 				<h:panelGrid columns="3" style="width: 100%">
 
 					<h:panelGroup class="card ui-fluid">
 						<div class="card">
-
-							<p:growl id="minicio" showDetail="true"
-								skipDetailIfEqualsSummary="true">
-								<p:autoUpdate />
-							</p:growl>
 							<div class="ui-fluid grid formgrid">
 								<div class="field col-12 md:col-4">
 									<p:outputLabel for="inicio" value="Data de Início" />
@@ -34,11 +33,6 @@
 					</h:panelGroup>
 					<h:panelGroup class="card ui-fluid">
 						<div class="card">
-
-							<p:growl id="mfim" showDetail="true"
-								skipDetailIfEqualsSummary="true">
-								<p:autoUpdate />
-							</p:growl>
 							<div class="ui-fluid grid formgrid">
 								<div class="field col-12 md:col-4">
 									<p:outputLabel for="fim" value="Data do fim" />
@@ -49,7 +43,7 @@
 					</h:panelGroup>
 					<p:commandButton value="Buscar"
 						action="#{vagaBean.buscarPorPeriodoOuTodos}"
-						styleClass="ui-button-warning" update="tabelaVagas mensagens" />
+						styleClass="mr-2" update="tabelaVagas growl" />
 				</h:panelGrid>
 				<h:panelGrid id="panelGridVaga" columns="6" style="width: 100%"
 					columnClasses="label, input">
@@ -79,7 +73,7 @@
 						<p:column headerText="Ações">
 							<p:commandButton value="Atualizar" process="@form @this"
 								actionListener="#{vagaBean.carregarVaga(vaga)}"
-								oncomplete="PF('dlgAtualizar').show()" update=":formDialog" />
+								oncomplete="PF('dlgAtualizar').show()" update=":formDialog " />
 							<p:commandButton value="Deletar"
 								action="#{vagaBean.apagarVaga(vaga.id)}" process="@this" />
 						</p:column>
@@ -112,7 +106,7 @@
 					<p:commandButton value="Salvar"
 						action="#{vagaBean.atualizarVaga(vagaBean.dto)}"
 						oncomplete="PF('dlgAtualizar').hide()"
-						update=":formPrincipal:tabelaVagas :formPrincipal:mensagens" />
+						update=":formPrincipal:tabelaVagas :formPrincipal:growl" />
 				</h:form>
 			</p:dialog>
 		</div>

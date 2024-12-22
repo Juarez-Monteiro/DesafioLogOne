@@ -6,12 +6,17 @@
 	xmlns:f="http://xmlns.jcp.org/jsf/core">
 
 	<ui:define name="content">
+	<h:outputScript name="locales/locale-pt.js" library="primefaces" />
 		<div class="container" id="container">
 			<h:form id="formPrincipal" class="formPrincipal">
-				<p:messages id="mensagens" showDetail="true" closable="true"
-					globalOnly="true" style="width: 100%">
+				<p:growl id="growl" showDetail="true"
+					skipDetailIfEqualsSummary="true" globalOnly="true" life="5000">
 					<p:autoUpdate />
-				</p:messages>
+				</p:growl>
+				<p:growl id="mcampos" showDetail="true"
+					skipDetailIfEqualsSummary="true" life="5000">
+					<p:autoUpdate />
+				</p:growl>
 
 				<h1 class="title">Listar vagas</h1>
 
@@ -38,7 +43,7 @@
 					</h:panelGroup>
 					<p:commandButton value="Buscar"
 						action="#{vagaBean.buscarPorPeriodoOuTodos}"
-						styleClass="ui-button-warning" update="tabelaVagas mensagens" />
+						styleClass="mr-2" update="@form tabelaVagas growl" />
 				</h:panelGrid>
 
 				<h:panelGrid id="panelGridVaga" columns="6" style="width: 100%"
@@ -47,11 +52,11 @@
 						var="vaga" style="width: 100%" editable="true" editMode="row"
 						emptyMessage="Nenhuma vaga encontrada.">
 
-						<p:ajax event="rowEdit" listener="#{vagaBean.atualizarVaga(vaga)}"
-							update=":formPrincipal:mensagens" />
+						<p:ajax event="rowEdit" listener="#{vagaBean.atualizarVaga}"
+							update=":formPrincipal:tabelaVagas :formPrincipal:growl" />
 						<p:ajax event="rowEditCancel"
 							listener="#{vagaBean.onRowEditCancel}"
-							update=":formPrincipal:mensagens" />
+							update=":formPrincipal:growl" />
 
 						<p:column headerText="ID">
 							<p:cellEditor>

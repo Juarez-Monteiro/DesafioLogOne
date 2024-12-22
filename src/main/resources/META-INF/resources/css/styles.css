@@ -1,9 +1,59 @@
 
+/* Estilo para a página */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
 
-footer {
-  position: absolute;
-  bottom: 0;
-  text-align: center;
+/* O conteúdo principal tem rolagem acima do footer */
+body, html {
+  height: 100%;
+}
+
+/* Conteúdo da página */
+.content {
+  padding: 20px;
+  padding-bottom: 60px; /* Espaço extra para garantir que o conteúdo não fique atrás do footer */
+  overflow-y: auto; /* Permite rolar o conteúdo */
+  height: calc(100vh - 60px); /* Calcula a altura restante, considerando o footer fixo */
+}
+#menu {
+	position: inherit;
+	width: 100%;
+}
+/* Estilo do footer fixo */
+.footer {
+  background-color: #3584e4; /* Cor de fundo */
+  color: white; /* Cor do texto */
+  text-align: center; /* Alinha o texto ao centro */
+  padding: 20px 0; /* Espaçamento interno */
+  position: fixed; /* Fixa o footer na parte inferior */
+  bottom: 0; /* Coloca o footer na parte inferior da tela */
+  left: 0;
   width: 100%;
-  height: 2.5rem;            
+  z-index: 1000; /* Garante que o footer ficará acima de outros elementos */
+}
+
+.footer .footer-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+.footer p {
+  margin: 0;
+}
+
+.footer .social-media a {
+  color: white;
+  text-decoration: none;
+  margin: 0 10px;
+}
+
+.footer .social-media a:hover {
+  text-decoration: underline;
 }

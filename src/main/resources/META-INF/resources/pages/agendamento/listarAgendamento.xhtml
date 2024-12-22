@@ -6,12 +6,17 @@
 	xmlns:f="http://xmlns.jcp.org/jsf/core">
 
 	<ui:define name="content">
+	<h:outputScript name="locales/locale-pt.js" library="primefaces" />
 		<div class="container" id="container">
 			<h:form class="form-manter">
-				<p:messages id="mensagens" showDetail="true" closable="true"
-					style="width: 100%" globalOnly="true">
+				<p:growl id="growl" showDetail="true"
+					skipDetailIfEqualsSummary="true" globalOnly="true" life="5000">
 					<p:autoUpdate />
-				</p:messages>
+				</p:growl>
+				<p:growl id="mcampos" showDetail="true"
+					skipDetailIfEqualsSummary="true" life="5000">
+					<p:autoUpdate />
+				</p:growl>
 
 				<h1 class="title">Listar Agendamentos</h1>
 
@@ -19,11 +24,6 @@
 
 					<h:panelGroup class="card ui-fluid">
 						<div class="card">
-
-							<p:growl id="mdinicio" showDetail="true"
-								skipDetailIfEqualsSummary="true">
-								<p:autoUpdate />
-							</p:growl>
 							<div class="ui-fluid grid formgrid">
 								<div class="field col-12 md:col-4">
 									<p:outputLabel for="inicio" value="Data de Início" />
@@ -36,16 +36,11 @@
 					</h:panelGroup>
 					<h:panelGroup class="card ui-fluid">
 						<div class="card">
-
-							<p:growl id="mdfim" showDetail="true"
-								skipDetailIfEqualsSummary="true">
-								<p:autoUpdate />
-							</p:growl>
 							<div class="ui-fluid grid formgrid">
 								<div class="field col-12 md:col-4">
 									<p:outputLabel for="fim" value="Data do fim" />
 									<p:datePicker id="fim" value="#{agendamentoBean.fim}"
-										 required="true" 
+										required="true"
 										requiredMessage="Por favor, preencha o campo data do fim." />
 								</div>
 							</div>
@@ -57,7 +52,8 @@
 
 						<p:selectOneMenu id="dropdownSolicitante"
 							value="#{agendamentoBean.solicitanteSelecionado}"
-							style="width: 100%"
+							style="width: 100%" required="true"
+							requiredMessage="Selecione um solicitante!"
 							onfocus="PF('carregarSolicitantesWidget').click(); alert('Comando acionado');">
 							<f:selectItem itemLabel="Selecione" itemValue="" />
 							<f:selectItems value="#{agendamentoBean.solicitantes}"
@@ -74,14 +70,14 @@
 					</h:panelGroup>
 					<p:commandButton value="Buscar"
 						action="#{agendamentoBean.listarAgendamentosPorPeriodo}"
-						styleClass="ui-button-warning"
-						update="@form:tabelaAgendamentos mensagens" process="@form" />
+						styleClass="mr-2"
+						update="@form:tabelaAgendamentos growl" process="@form" />
 				</h:panelGrid>
 				<h:panelGrid columns="7" style="width: 100%"
 					columnClasses="label, input">
 					<p:dataTable id="tabelaAgendamentos"
 						value="#{agendamentoBean.listaAgendamentos}" var="agendamento"
-						style="width: 100%" emptyMessage="Nenhum vaga encontrado.">
+						style="width: 100%" emptyMessage="Nenhum agendamento encontrado.">
 
 						<p:column headerText="ID">
 							<h:outputText value="#{agendamento.id}" />
@@ -92,7 +88,7 @@
 						</p:column>
 
 						<p:column headerText="Data">
-							<h:outputText value="#{agendamento.data}" >
+							<h:outputText value="#{agendamento.data}">
 								<f:convertDateTime pattern="dd/MM/yyyy" />
 							</h:outputText>
 						</p:column>
@@ -108,7 +104,7 @@
 
 						<p:column headerText="Ações">
 
-							<p:commandButton value="Atualizar"
+							<p:commandButton value="Atualizar" styleClass="mr-2"
 								action="#{agendamentoBean.atualizarAgendamento(agendamento)}"
 								update="@form:tabelaAgendamentos" process="@this" />
 
