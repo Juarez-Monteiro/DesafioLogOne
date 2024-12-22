@@ -6,10 +6,9 @@ import java.util.List;
 import java.util.Optional;
 
 import javax.annotation.ManagedBean;
-import javax.faces.application.FacesMessage;
-import javax.faces.context.FacesContext;
+import javax.faces.view.ViewScoped;
 
-import org.springframework.web.context.annotation.RequestScope;
+import org.primefaces.event.RowEditEvent;
 
 import com.teste.pratico.business.service.SolicitanteService;
 import com.teste.pratico.domain.dto.SolicitanteDTO;
@@ -17,7 +16,7 @@ import com.teste.pratico.domain.dto.SolicitanteDTO;
 import lombok.Data;
 
 @ManagedBean
-@RequestScope
+@ViewScoped
 @Data
 public class SolicitanteBean extends AbstractBean {
 
@@ -58,7 +57,8 @@ public class SolicitanteBean extends AbstractBean {
 		}
 	}
 
-	public void atualizarSolicitante(SolicitanteDTO dto) {
+	public void atualizarSolicitante(RowEditEvent<SolicitanteDTO> event) {
+		SolicitanteDTO dto = event.getObject();
 		try {
 			String mensagem = service.update(dto);
 			infoMensagem(mensagem);

@@ -7,6 +7,7 @@ public class Mensagens {
     public static final String SOLICITANTE_NAO_LOCALIZADO = "Solicitante %s não localizado!";
     public static final String SOLICITANTE_REMOVIDO = "Solicitante %s removido com sucesso!";
     public static final String SOLICITANTE_ATUALIZADO = "Solicitante %s atualizado com sucesso!";
+    public static final String EXISTE_AGENDAMETO_SOLICITANTE = "Existe agendamentos para solicitante.";
     public static final String ERRO_PROCESSAR = "Erro no processamento, por favor, tente novamente.";
     public static final String VAGA_EXISTENTE = "Vagas para o período de %s a %s já existentes!";
     public static final String VAGA_SALVA = "Vagas para o período de %s a %s salvas com sucesso!";

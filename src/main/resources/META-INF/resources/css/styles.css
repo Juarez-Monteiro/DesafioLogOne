@@ -19,6 +19,8 @@ body, html {
   height: calc(100vh - 60px); /* Calcula a altura restante, considerando o footer fixo */
 }
 #menu {
+	background-color: #3584e4;
+	text-align: right;
 	position: inherit;
 	width: 100%;
 }
@@ -57,3 +59,4 @@ body, html {
 .footer .social-media a:hover {
   text-decoration: underline;
 }
+

@@ -8,10 +8,9 @@ import java.util.Optional;
 
 import javax.annotation.ManagedBean;
 import javax.annotation.PostConstruct;
-import javax.faces.application.FacesMessage;
-import javax.faces.context.FacesContext;
+import javax.faces.view.ViewScoped;
 
-import org.springframework.web.context.annotation.RequestScope;
+import org.primefaces.event.RowEditEvent;
 
 import com.teste.pratico.business.service.AgendamentoService;
 import com.teste.pratico.business.service.SolicitanteService;
@@ -22,7 +21,7 @@ import com.teste.pratico.domain.dto.SolicitanteDTO;
 import lombok.Data;
 
 @ManagedBean
-@RequestScope
+@ViewScoped
 @Data
 public class AgendamentoBean extends AbstractBean {
 
@@ -87,7 +86,9 @@ public class AgendamentoBean extends AbstractBean {
 		}
 	}
 
-	public void atualizarAgendamento(AgendamentoDTO dto) {
+	public void atualizarAgendamento(RowEditEvent<AgendamentoDTO> event) {
+		AgendamentoDTO dto = event.getObject();
+
 		try {
 			String mensagem = service.update(dto);
 			infoMensagem(mensagem);
