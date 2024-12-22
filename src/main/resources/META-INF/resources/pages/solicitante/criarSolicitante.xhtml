@@ -6,12 +6,17 @@
 	xmlns:f="http://xmlns.jcp.org/jsf/core">
 
 	<ui:define name="content">
+	<h:outputScript name="locales/locale-pt.js" library="primefaces" />
 		<div class="container" id="container">
 			<h:form class="form-manter">
-				<p:messages id="mensagens" showDetail="true" closable="true"
-					sglobalOnly="true" tyle="width: 100%">
+				<p:growl id="growl" showDetail="true"
+					skipDetailIfEqualsSummary="true" globalOnly="true" life="5000">
 					<p:autoUpdate />
-				</p:messages>
+				</p:growl>
+				<p:growl id="mcampos" showDetail="true"
+					skipDetailIfEqualsSummary="true" life="5000">
+					<p:autoUpdate />
+				</p:growl>
 				<h1 class="title">Solicitante</h1>
 
 				<h:panelGrid columns="1" style="width: 100%">
@@ -26,12 +31,11 @@
 				<div class="form-footer">
 					<p:commandButton value="Salvar"
 						action="#{solicitanteBean.salvarSolicitante}"
-						styleClass="ui-button-warning" update="@form mensagens"
+						styleClass="mr-2" update="@form growl"
 						process="@form @this" />
-					<p:commandButton value="Cancelar"
-						styleClass="ui-button-outlined ui-button-warning"
-						action="#{solicitanteBean.listarTodosSolicitantes}"
-						process="@this" />
+					<p:commandButton value="Limpar"
+						styleClass="mr-2 ui-button-warning" process="@this"
+						update="@form  @this" resetInput="true" />
 				</div>
 			</h:form>
 		</div>

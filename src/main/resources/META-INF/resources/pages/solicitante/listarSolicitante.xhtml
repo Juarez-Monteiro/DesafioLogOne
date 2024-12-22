@@ -6,12 +6,13 @@
 	xmlns:f="http://xmlns.jcp.org/jsf/core">
 
 	<ui:define name="content">
+	<h:outputScript name="locales/locale-pt.js" library="primefaces" />
 		<div class="container" id="container">
 			<h:form class="form-manter">
-				<p:messages id="mensagens" showDetail="true" closable="true" globalOnly="true"
-					style="width: 100%">
+				<p:growl id="growl" showDetail="true"
+					skipDetailIfEqualsSummary="true" globalOnly="true" life="5000">
 					<p:autoUpdate />
-				</p:messages>
+				</p:growl>
 
 				<h1 class="title">Solicitante</h1>
 
@@ -22,8 +23,8 @@
 						value="#{solicitanteBean.filtroNome}" />
 					<p:commandButton value="Buscar"
 						action="#{solicitanteBean.buscarPorNomeOuTodos}"
-						styleClass="ui-button-warning"
-						update="tabelaSolicitantes mensagens" />
+						styleClass="mr-2"
+						update="tabelaSolicitantes growl" />
 				</h:panelGrid>
 				<h:panelGrid columns="4" style="width: 100%"
 					columnClasses="label, input">

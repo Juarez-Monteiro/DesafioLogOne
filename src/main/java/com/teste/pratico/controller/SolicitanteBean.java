@@ -51,10 +51,7 @@ public class SolicitanteBean extends AbstractBean {
 	public void salvarSolicitante() throws IOException {
 		try {
 			String mensagem = service.create(dto);
-			FacesContext context = FacesContext.getCurrentInstance();
-			context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, mensagem, ""));
-			context.getExternalContext().getFlash().setKeepMessages(true);
-			context.getExternalContext().redirect("/index.xhtml");
+			infoMensagem(mensagem);
 
 		} catch (Exception e) {
 			erroMensagem(e.getMessage());

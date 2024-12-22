@@ -6,23 +6,23 @@
 	xmlns:f="http://xmlns.jcp.org/jsf/core">
 
 	<ui:define name="content">
+	<h:outputScript name="locales/locale-pt.js" library="primefaces" />
 		<div class="container" id="container">
 			<h:form class="form-criar">
-				<p:messages id="mensagens" showDetail="true" closable="true"
-					globalOnly="true" style="width: 100%">
+				<p:growl id="growl" showDetail="true"
+					skipDetailIfEqualsSummary="true" globalOnly="true" life="5000">
 					<p:autoUpdate />
-				</p:messages>
+				</p:growl>
+				<p:growl id="mcampos" showDetail="true"
+					skipDetailIfEqualsSummary="true" life="5000">
+					<p:autoUpdate />
+				</p:growl>
 				<h1 class="title">Criar Agendamentos</h1>
 
 				<h:panelGrid columns="3" style="width: 100%">
 
 					<h:panelGroup class="card ui-fluid">
 						<div class="card">
-
-							<p:growl id="mdata" showDetail="true"
-								skipDetailIfEqualsSummary="true">
-								<p:autoUpdate />
-							</p:growl>
 							<div class="ui-fluid grid formgrid">
 								<div class="field col-12 md:col-4">
 									<p:outputLabel for="data" value="Data do Agendamento" />
@@ -48,6 +48,7 @@
 
 						<p:selectOneMenu id="dropdownSolicitante"
 							value="#{agendamentoBean.dto.solicitante}" style="width: 100%"
+							required="true" requiredMessage="Selecione um solicitante!"
 							onfocus="PF('carregarSolicitantesWidget').click(); alert('Comando acionado');">
 							<f:selectItem itemLabel="Selecione" itemValue="" />
 							<f:selectItems value="#{agendamentoBean.solicitantes}"
@@ -62,18 +63,16 @@
 
 						<p:spacer height="10" />
 
-
 					</h:panelGroup>
 				</h:panelGrid>
 				<div class="form-footer">
 					<p:commandButton value="Salvar"
 						action="#{agendamentoBean.salvarAgendamento()}"
-						styleClass="ui-button-warning" update="@form mensagens"
+						styleClass="mr-2" update="@form growl"
 						process="@form @this" />
-					<p:commandButton value="Cancelar"
-						styleClass="ui-button-outlined ui-button-warning"
-						action="#{agendamentoBean.listarTodosAgendamentos}"
-						process="@this" />
+					<p:commandButton value="Limpar"
+						styleClass="mr-2 ui-button-warning" process="@this"
+						update="@form  @this" resetInput="true" />
 				</div>
 			</h:form>
 		</div>

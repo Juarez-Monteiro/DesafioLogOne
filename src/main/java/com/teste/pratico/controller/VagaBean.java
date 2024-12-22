@@ -13,9 +13,11 @@ import javax.faces.context.FacesContext;
 import org.primefaces.event.RowEditEvent;
 import org.springframework.web.context.annotation.RequestScope;
 
+import com.teste.pratico.business.exception.ViolacaoRegraNegocioException;
 import com.teste.pratico.business.service.VagaService;
 import com.teste.pratico.domain.dto.VagaDTO;
 import com.teste.pratico.helpers.LogOneUtil;
+import com.teste.pratico.helpers.Mensagens;
 
 import lombok.Data;
 
@@ -51,19 +53,15 @@ public class VagaBean extends AbstractBean {
 	public void salvarVaga() throws IOException {
 		try {
 			String mensagem = service.create(dto);
-			FacesContext context = FacesContext.getCurrentInstance();
-			context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, mensagem, ""));
-			context.getExternalContext().getFlash().setKeepMessages(true);
-			context.getExternalContext().redirect("/index.xhtml");
-
+			infoMensagem(mensagem);
 		} catch (Exception e) {
 			erroMensagem(e.getMessage());
 		}
 
 	}
 
-	public void atualizarVaga(RowEditEvent<VagaDTO> event) {
-		VagaDTO dto = event.getObject();
+	public void atualizarVaga(VagaDTO dto) {
+
 		try {
 			String mensagem = service.update(dto);
 			infoMensagem(mensagem);
@@ -83,13 +81,4 @@ public class VagaBean extends AbstractBean {
 		}
 	}
 
-	public void carregarVaga(VagaDTO vaga) {
-	
-		VagaDTO dto = new VagaDTO();
-		dto.setId(vaga.getId());
-		dto.setInicio(vaga.getInicio());
-		dto.setFim(vaga.getFim());
-		dto.setQuantidade(vaga.getQuantidade());
-
-	}
 }
