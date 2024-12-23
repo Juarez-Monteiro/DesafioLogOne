@@ -3,15 +3,40 @@
                 xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
                 xmlns:p="http://primefaces.org/ui">
 
-    <footer class="footer">
-    <div class="footer-content">
-      <p> 2024 Juarez Nonteiro - Todos os direitos reservados.</p>
-      <div class="social-media">
-        <a href="https://facebook.com" target="_blank">Facebook</a>
-        <a href="https://twitter.com" target="_blank">Twitter</a>
-        <a href="https://instagram.com" target="_blank">Instagram</a>
-      </div>
-    </div>
-  </footer>
+    <footer class="footer surface-800 text-light">
+        <div class="container footer-top">
+            <div class="ui-g ui-fluid">
+
+                <!-- Informações da Empresa -->
+                <div class="ui-g-12 ui-lg-4 footer-about mb-5">
+                    <h3>Juarez Monteiro</h3>
+                    <p>
+                        <strong>Telefone:</strong> (87) 98151-9864<br />
+                        <strong>Email:</strong> juarezmonteirovj&#64;gmail.com.br
+                    </p>
+                </div>
+
+                <!-- Links Úteis -->
+                <div class="ui-g-6 ui-lg-4 footer-links mb-5">
+                    <h4>Guia rápido</h4>
+                    <ul>
+                      <P><h:link value="Home" outcome="/index.xhtml" /></P>
+                      <P><h:link value="Solicitante" outcome="/pages/solicitante/criarSolicitante.xhtml" /></P>
+                      <P><h:link value="Vaga" outcome="/pages/vaga/criarVaga.xhtml" /></P>
+                      <P><h:link value="Agentamento" outcome="/pages/agendamento/criarAgendamento.xhtml" /></P>
+                    </ul>
+                
+                </div>
+
+                <!-- Serviços -->
+                <div class="ui-g-6 ui-lg-4 footer-about mb-5">
+                    <h4>Nossos serviços</h4>
+                     <p>
+                        <strong>Gestão de Vagas, Solicitantes e Agendamentos</strong>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </footer>
 
 </ui:composition>

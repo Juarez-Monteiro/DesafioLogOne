@@ -20,7 +20,7 @@
 
 				<h1 class="title">Listar Agendamentos</h1>
 
-				<h:panelGrid columns="4" style="width: 100%">
+				<h:panelGrid class="mt-5" columns="4" style="width: 100%">
 
 					<h:panelGroup class="card ui-fluid">
 						<div class="card">
@@ -46,7 +46,7 @@
 							</div>
 						</div>
 					</h:panelGroup>
-					<h:panelGroup class="card ui-fluid">
+					<h:panelGroup class="card ui-fluid pt-1">
 						<p:outputLabel for="dropdownSolicitante"
 							value="Selecione um solicitante:" />
 
@@ -66,7 +66,6 @@
 							action="#{agendamentoBean.carregarSolicitantes}"
 							update="@form:dropdownSolicitante" process="@this" />
 
-						<p:spacer height="10" />
 					</h:panelGroup>
 					<p:commandButton value="Buscar"
 						action="#{agendamentoBean.listarAgendamentosPorPeriodo}"

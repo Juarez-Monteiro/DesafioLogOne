@@ -19,7 +19,7 @@
 				</p:growl>
 				<h1 class="title">Criar Agendamentos</h1>
 
-				<h:panelGrid columns="3" style="width: 100%">
+				<h:panelGrid class="mt-5" columns="3" style="width: 100%">
 
 					<h:panelGroup class="card ui-fluid">
 						<div class="card">
@@ -36,8 +36,8 @@
 					</h:panelGroup>
 					<h:panelGroup class="card ui-fluid">
 						<h:panelGroup class="card ui-fluid">
-							<h:outputLabel value="Motivo do agendamento" />
-							<p:inputText value="#{agendamentoBean.dto.motivo}"
+							<p:outputLabel for="motivo" value="Motivo do agendamento" />
+							<p:inputText id="motivo" value="#{agendamentoBean.dto.motivo}"
 								required="true"
 								requiredMessage="Por favor, preencha o campo motivo do agendamento." />
 						</h:panelGroup>
@@ -60,9 +60,6 @@
 						<p:remoteCommand name="carregarSolicitantesWidget"
 							action="#{agendamentoBean.carregarSolicitantes}"
 							update="@form:dropdownSolicitante" process="@this" />
-
-						<p:spacer height="10" />
-
 					</h:panelGroup>
 				</h:panelGrid>
 				<div class="form-footer">

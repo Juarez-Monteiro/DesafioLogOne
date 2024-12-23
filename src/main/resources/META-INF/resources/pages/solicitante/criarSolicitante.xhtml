@@ -19,11 +19,11 @@
 				</p:growl>
 				<h1 class="title">Solicitante</h1>
 
-				<h:panelGrid columns="1" style="width: 100%">
+				<h:panelGrid class="mt-5" columns="1" style="width: 100%">
 
 					<h:panelGroup class="card ui-fluid">
-						<h:outputLabel value="Nome" />
-						<p:inputText value="#{solicitanteBean.dto.nome}" required="true"
+						<p:outputLabel for="nome" value="Nome" />
+						<p:inputText id="nome" value="#{solicitanteBean.dto.nome}" required="true"
 							requiredMessage="Por favor, preencha o campo Nome." />
 					</h:panelGroup>
 

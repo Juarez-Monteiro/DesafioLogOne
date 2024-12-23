@@ -72,7 +72,6 @@ A aplicação foi projetada utilizando uma arquitetura **MVC (Model-View-Control
    - Representação das entidades do sistema.
 
 ### Design Patterns
-- **Singleton:** Para gerenciamento de configurações globais.
 - **DTO (Data Transfer Object):** Para transferência de dados entre camadas.
 - **Repository:** Para abstração do acesso ao banco de dados.
 

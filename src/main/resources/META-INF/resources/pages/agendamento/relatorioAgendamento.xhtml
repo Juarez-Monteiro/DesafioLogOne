@@ -20,7 +20,7 @@
 
 				<h1 class="title">Relatório de Agendamentos</h1>
 
-				<h:panelGrid columns="4" style="width: 100%">
+				<h:panelGrid class="mt-5" columns="4" style="width: 100%">
 
 					<h:panelGroup class="card ui-fluid">
 						<div class="card">
@@ -66,12 +66,13 @@
 							action="#{agendamentoBean.carregarSolicitantes}"
 							update="@form:dropdownSolicitante" process="@this" />
 
-						<p:spacer height="10" />
 					</h:panelGroup>
+					<h:panelGroup class="card ui-fluid">
 					<p:commandButton value="Buscar"
 						action="#{agendamentoBean.listarTodosAgendamentos}"
 						styleClass="mr-2"
 						update="@form:tabelaAgendamentos growl" process="@form" />
+						</h:panelGroup>
 				</h:panelGrid>
 				<h:panelGrid columns="5" style="width: 100%"
 					columnClasses="label, input">
