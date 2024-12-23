@@ -16,9 +16,9 @@
 
 				<h1 class="title">Solicitantes</h1>
 
-				<h:panelGrid columns="3" style="width: 100%"
+				<h:panelGrid class="mt-5" columns="3" style="width: 100%"
 					columnClasses="label, input">
-					<h:outputLabel value="Nome" for="filtroNome" />
+					<p:outputLabel value="Nome" for="filtroNome" />
 					<p:inputText style="width: 100%" id="filtroNome"
 						value="#{solicitanteBean.filtroNome}" />
 					<p:commandButton value="Buscar"
@@ -27,26 +27,27 @@
 				</h:panelGrid>
 				<h:panelGrid columns="4" style="width: 100%"
 					columnClasses="label, input">
-					<p:dataTable id="tabelaSolicitantes"  editable="true" editMode="row"
+					<p:dataTable id="tabelaSolicitantes" editable="true" editMode="row"
 						value="#{solicitanteBean.listaSolicitantes}" var="solicitante"
 						style="width: 100%" emptyMessage="Nenhum solicitante encontrado.">
-						
-						<p:ajax event="rowEdit" listener="#{solicitanteBean.atualizarSolicitante}"
+
+						<p:ajax event="rowEdit"
+							listener="#{solicitanteBean.atualizarSolicitante}"
 							update=":formPrincipal:tabelaSolicitantes :formPrincipal:growl" />
 						<p:ajax event="rowEditCancel"
 							update=":formPrincipal:tabelaSolicitantes :formPrincipal:growl" />
-							
+
 						<p:column headerText="ID">
 							<p:cellEditor>
 								<f:facet name="output">
 									<h:outputText value="#{solicitante.id}" />
 								</f:facet>
 								<f:facet name="input">
-									<p:inputText value="#{solicitante.id}"  disabled="true" />
+									<p:inputText value="#{solicitante.id}" disabled="true" />
 								</f:facet>
 							</p:cellEditor>
 						</p:column>
-							
+
 						<p:column headerText="Nome">
 							<p:cellEditor>
 								<f:facet name="output">
@@ -60,7 +61,8 @@
 
 						<p:column style="width:8rem" headerText="Editar">
 							<p:rowEditor editTitle="Editar" cancelTitle="Cancelar"
-								saveTitle="Salvar" />
+								saveTitle="Salvar" saveIcon="pi pi-check"
+								cancelIcon="pi pi-times" styleClass="custom-row-editor" />
 						</p:column>
 
 						<p:column style="width:8rem" headerText="Apagar">

@@ -19,7 +19,7 @@
 				</p:growl>
 				<h1 class="title">Criar Vagas</h1>
 
-				<h:panelGrid columns="3" style="width: 100%">
+				<h:panelGrid class="mt-5" columns="3" style="width: 100%">
 					<h:panelGroup class="card ui-fluid">
 						<div class="card">
 							<div class="ui-fluid grid formgrid">
@@ -50,8 +50,8 @@
 						<div class="card">
 							<div class="ui-fluid grid formgrid">
 								<div class="field col-12 md:col-4">
-									<h:outputLabel value="Quantidade de vagas" />
-									<p:inputNumber value="#{vagaBean.dto.quantidade}"
+									<p:outputLabel for="QtVaga" value="Quantidade de vagas" />
+									<p:inputNumber id="QtVaga" value="#{vagaBean.dto.quantidade}"
 										required="true"
 										requiredMessage="Por favor, preencha o campo quantidade."
 										modifyValueOnWheel="false" minValue="1" decimalPlaces="0" />
