@@ -117,7 +117,7 @@ Este projeto utiliza o banco de dados HSQLDB em modo arquivo, localizado na past
 
 **No Linux:** No arquivo application.properties, ajuste a URL do banco para apontar para o caminho correto do banco de dados em seu sistema. Por exemplo:
 
-spring.datasource.url=jdbc:hsqldb:file:**/media/juarez/c/LogOne**/Teste-Pratico-Desenvolvedor-Java/database/agenda/agenda;hsqldb.lock_file=false
+spring.datasource.url=jdbc:hsqldb:file:database/agenda/agenda;hsqldb.lock_file=false
 
 **No Windows:** Caso esteja utilizando Windows, o caminho pode ser diferente. Ajuste a URL do banco de dados para refletir o caminho do seu diretório no sistema. Exemplo:
 
