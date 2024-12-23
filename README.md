@@ -110,7 +110,11 @@ mvn -v
 
 Caso o Maven não esteja instalado, siga os passos de instalação disponíveis na documentação oficial do Maven.
 
-4. **Configure o banco de dados**
+4. **Verifique se o LOMBOK estar instalado**
+
+Caso o Lombok não esteja instalado, siga os passos de instalação disponíveis na documentação oficial do Lombok.
+
+5. **Configure o banco de dados**
 
 Este projeto utiliza o banco de dados HSQLDB em modo arquivo, localizado na pasta de database/agenda. Dependendo do seu sistema operacional, será necessário ajustar o caminho do banco de dados. 
 **Obs: Substituir a parte em destaque por o endereço que coresponde sua pasta**
@@ -121,25 +125,25 @@ spring.datasource.url=jdbc:hsqldb:file:database/agenda/agenda;hsqldb.lock_file=f
 
 **No Windows:** Caso esteja utilizando Windows, o caminho pode ser diferente. Ajuste a URL do banco de dados para refletir o caminho do seu diretório no sistema. Exemplo:
 
-spring.datasource.url=jdbc:hsqldb:file:**C:/LogOne**/Teste-Pratico-Desenvolvedor-Java/database/agenda/agenda;hsqldb.lock_file=false
+spring.datasource.url=jdbc:hsqldb:file:**C:/LogOne/Teste-Pratico-Desenvolvedor-Java/**database/agenda/agenda;hsqldb.lock_file=false
 
 Certifique-se de que o diretório de banco de dados exista e esteja acessível.
 
-5. **Compile o projeto**
+6. **Compile o projeto**
 Agora, compile o projeto usando Maven:
 
 mvn clean install
 
 Esse comando irá limpar qualquer build anterior e instalar todas as dependências necessárias, além de gerar o arquivo .jar da aplicação.
 
-6. **Execute o projeto**
+7. **Execute o projeto**
 Para iniciar a aplicação, utilize o comando Maven:
 
 mvn spring-boot:run
 
 A aplicação será iniciada na porta 9292, que pode ser acessada no seu navegador.
 
-7. **Acesso ao Sistema**
+8. **Acesso ao Sistema**
 Após a execução, você poderá acessar as funcionalidades através de um navegador. Para isso:
 
 Frontend (Interface Gráfica): Acesse a aplicação web através de http://localhost:9292.
